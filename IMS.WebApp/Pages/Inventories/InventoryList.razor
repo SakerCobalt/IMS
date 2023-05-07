@@ -1,0 +1,26 @@
+﻿@page "/Inventories"
+
+@inject NavigationManager NavigationManager
+
+<h3>Inventory List</h3>
+<br />
+<SearchInventoryComponent OnSearchInventory="OnInventorySearch"></SearchInventoryComponent>
+<br />
+<InventoryListComponent SearchTerm="@searchTerm"></InventoryListComponent>
+<br />
+<button type="button" class="btn btn-primary" @onclick="AddInventory">Add Inventory</button>
+
+@code {
+    private string searchTerm = string.Empty;
+
+    //When the Event callback fires, it triggers the action, OnInventorySearch created below
+    private void OnInventorySearch(string searchTerm)
+    {
+        this.searchTerm = searchTerm;
+    }
+
+    private void AddInventory()
+    {
+        NavigationManager.NavigateTo("/AddInventory");
+    }
+}

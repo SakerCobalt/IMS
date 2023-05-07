@@ -1,0 +1,20 @@
+﻿<div class="input-group">
+    <input type="text" class="form-control" placeholder="Type inventory name here to search" @bind-value="inventoryNameToSearch"/>
+    <button type="button" class="btn-success input-group-text" @onclick="OnSearch">Search</button>
+</div>
+
+<br />
+
+@code {
+    private string inventoryNameToSearch = string.Empty;
+
+    //When called, the Event Callback will respond back to the parent control.  [Parameter] exposes this as a parameter for the parent component.
+    [Parameter]
+    public EventCallback<string> OnSearchInventory { get; set; }
+
+    private void OnSearch()
+    {
+        //Can invoke the Event Callback without checking if it is null.
+        OnSearchInventory.InvokeAsync(inventoryNameToSearch);
+    }
+}
