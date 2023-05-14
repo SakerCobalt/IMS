@@ -37,5 +37,60 @@ namespace IMS.Plugins.InMemory
 
             return Task.CompletedTask;
         }
+
+        public async Task<Product?> GetProductByIdAsync(int productId)
+        {
+            var prod = _products.FirstOrDefault(i => i.ProductID == productId);
+            var newProd = new Product();
+            if(prod != null)
+            {
+                newProd.ProductID = prod.ProductID;
+                newProd.ProductName = prod.ProductName;
+                newProd.Price = prod.Price;
+                newProd.Quantity = prod.Quantity;
+                newProd.ProductInventories = new List<ProductInventory>();
+                if(prod.ProductInventories != null && prod.ProductInventories.Count > 0)
+                {
+                    foreach(var prodInv in prod.ProductInventories)
+                    {
+                        var newProdInv = new ProductInventory
+                        {
+                            inventoryId = prodInv.inventoryId,
+                            ProductId = prodInv.ProductId,
+                            Product = prod,
+                            Inventory = new Inventory(),
+                            InventoryQuantity = prodInv.InventoryQuantity
+                        };
+                        if (prodInv.Inventory != null)
+                        {
+                            newProdInv.Inventory.InventoryID = prodInv.Inventory.InventoryID;
+                            newProdInv.Inventory.InventoryName = prodInv.Inventory.InventoryName;
+                            newProdInv.Inventory.Price = prodInv.Inventory.Price;
+                            newProdInv.Inventory.Quantity = prodInv.Inventory.Quantity;
+                        }
+
+                        newProd.ProductInventories.Add(newProdInv);
+                    }
+                }
+            }
+
+            return await Task.FromResult(newProd);
+        }
+
+        public Task UpdateProductAsync(Product product)
+        {
+            if (_products.Any(i => i.ProductID == product.ProductID && i.ProductName.ToLower() == product.ProductName.ToLower())) return Task.CompletedTask;
+
+            var prod = _products.FirstOrDefault(i => i.ProductID == product.ProductID);
+            if (prod != null)
+            {
+                prod.ProductName = product.ProductName;
+                prod.Price = product.Price;
+                prod.Quantity = product.Quantity;
+                prod.ProductInventories = product.ProductInventories;
+            }
+
+            return Task.CompletedTask;
+        }
     }
 }
