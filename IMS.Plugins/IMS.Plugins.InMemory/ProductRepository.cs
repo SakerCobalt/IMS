@@ -1,5 +1,5 @@
 ﻿using IMS.CoreBusiness;
-using IMS.UseCases.Products;
+using IMS.UseCases.PluginInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,7 +79,7 @@ namespace IMS.Plugins.InMemory
 
         public Task UpdateProductAsync(Product product)
         {
-            if (_products.Any(i => i.ProductID == product.ProductID && i.ProductName.ToLower() == product.ProductName.ToLower())) return Task.CompletedTask;
+            if (_products.Any(i => i.ProductID != product.ProductID && i.ProductName.ToLower() == product.ProductName.ToLower())) return Task.CompletedTask;
 
             var prod = _products.FirstOrDefault(i => i.ProductID == product.ProductID);
             if (prod != null)

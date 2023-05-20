@@ -1,6 +1,6 @@
 ﻿using IMS.CoreBusiness;
 
-namespace IMS.UseCases.Products
+namespace IMS.UseCases.PluginInterfaces
 {
     public interface IProductRepository
     {
