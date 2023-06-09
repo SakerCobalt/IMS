@@ -6,6 +6,7 @@ namespace IMS.Plugins.InMemory
     {
         public int InventoryTransactionId { get; set; }
 
+        public string ProductionNumber { get; set; }  = string.Empty;
         public string PoNumber { get; set; } = string.Empty;
         [Required]
         public int InventoryId { get; set; }
