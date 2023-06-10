@@ -16,7 +16,7 @@ namespace IMS.Plugins.InMemory
             _products = new List<Product>()
             {
                 new Product(){ ProductID = 1,ProductName = "Bike", Quantity = 10, Price = 150 },
-                new Product(){ ProductID = 1,ProductName = "Car", Quantity = 5, Price = 25000 }
+                new Product(){ ProductID = 2,ProductName = "Car", Quantity = 5, Price = 25000 }
             };
         }
         public async Task<IEnumerable<Product>> GetProductsByNameAsync(string name)
