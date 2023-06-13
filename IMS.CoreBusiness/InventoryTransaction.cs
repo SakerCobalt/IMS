@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace IMS.Plugins.InMemory
+namespace IMS.CoreBusiness
 {
     public class InventoryTransaction
     {
@@ -21,6 +21,6 @@ namespace IMS.Plugins.InMemory
         public DateTime TransactionDate { get; set; }
         [Required]
         public string DoneBy { get; set; } = string.Empty;
-        public InventoryRepository Inventory { get; set; }
+        public Inventory Inventory { get; set; }
     }
 }

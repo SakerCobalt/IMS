@@ -1,4 +1,4 @@
-﻿namespace IMS.Plugins.InMemory
+﻿namespace IMS.CoreBusiness
 {
     public enum InventoryTransactionType
     {
