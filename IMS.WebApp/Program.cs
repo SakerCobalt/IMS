@@ -6,10 +6,12 @@ global using IMS.UseCases.PluginInterfaces;
 global using IMS.WebApp.Data;
 global using IMS.UseCases.Products;
 global using IMS.WebApp.ViewModels;
+global using IMS.UseCases.Reports;
 
 using IMS.UseCases.Products.Interfaces;
 using IMS.UseCases.Activities.Interfaces;
 using IMS.UseCases.Activities;
+using IMS.UseCases.Reports.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +38,9 @@ builder.Services.AddTransient<IEditProductUseCase, EditProductUseCase>();
 builder.Services.AddTransient<IPurchaseInventoryUseCase, PurchaseInventoryUseCase>();
 builder.Services.AddTransient<IProduceProductUseCase, ProduceProductUseCase>();
 builder.Services.AddTransient<ISellProductUseCase, SellProductUseCase>();
+
+builder.Services.AddTransient<ISearchInventoryTransactionsUseCase, SearchInventoryTransactionsUseCase>();
+builder.Services.AddTransient<ISearchProductTransactionsUseCase, SearchProductTransactionsUseCase>();
 
 var app = builder.Build();
 
