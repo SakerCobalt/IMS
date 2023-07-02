@@ -38,8 +38,21 @@
 </EditForm>
 
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationStateTask { get; set; }
+    private AuthenticationState? authenticationState;
+
     private ProduceViewModel produceViewModel = new ProduceViewModel();
     private Product? selectedProduct = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (authenticationStateTask != null)
+        {
+            authenticationState = await authenticationStateTask;
+
+        }
+    }
 
     protected override void OnAfterRender(bool firstRender)
     {
@@ -67,7 +80,11 @@
     }
     private async Task Produce()
     {
-        await ProduceProductUseCase.ExecuteAsync(this.produceViewModel.ProductionNumber, this.selectedProduct, this.produceViewModel.QuantityToProduce, "Frank");
+        if (this.selectedProduct!=null && authenticationState != null && !string.IsNullOrEmpty(authenticationState.User?.Identity?.Name))
+        {
+            await ProduceProductUseCase.ExecuteAsync(this.produceViewModel.ProductionNumber, this.selectedProduct, this.produceViewModel.QuantityToProduce, authenticationState.User.Identity.Name);
+            
+        }
 
         this.produceViewModel = new ProduceViewModel();
         this.selectedProduct = null;

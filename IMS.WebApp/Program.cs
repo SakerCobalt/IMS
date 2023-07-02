@@ -12,8 +12,29 @@ using IMS.UseCases.Products.Interfaces;
 using IMS.UseCases.Activities.Interfaces;
 using IMS.UseCases.Activities;
 using IMS.UseCases.Reports.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using IMS.Plugins.EFCoreSqlServer;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
+var constr = builder.Configuration.GetConnectionString("InventoryManagement");
+
+//Configure EF Core for Identity
+builder.Services.AddDbContext<AccountDbContext>(options =>
+{
+    options.UseSqlServer(constr);
+});
+
+//Configure Identity
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+{
+    options.SignIn.RequireConfirmedEmail = false;
+}).AddEntityFrameworkStores<AccountDbContext>();
+
+builder.Services.AddDbContext<IMSContext>(options =>
+{
+    options.UseSqlServer(constr);
+});
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -57,6 +78,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");

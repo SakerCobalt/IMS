@@ -1,7 +1,7 @@
 ﻿@page "/inventoryReport"
 
 @inject ISearchInventoryTransactionsUseCase SearchInventoryTransactionsUseCase
-@inject JSRuntime JSRuntime
+@inject IJSRuntime JSRuntime
 
 <h3>Inventory Transactions</h3>
 <br />
@@ -52,6 +52,7 @@
                     <th>Unit Price</th>
                     <th>PO#</th>
                     <th>Production#</th>
+                    <th>Done By</th>
                 </tr>
             </thead>
             <tbody>
@@ -76,6 +77,7 @@
                         <td>@it.UnitPrice.ToString("c")</td>
                         <td>@it.PoNumber</td>
                         <td>@it.ProductionNumber</td>
+                        <td>@it.DoneBy</td>
                     </tr>
                 }
             </tbody>

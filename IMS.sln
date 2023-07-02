@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IMS.Plugins", "IMS.Plugins"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMS.Plugins.InMemory", "IMS.Plugins\IMS.Plugins.InMemory\IMS.Plugins.InMemory.csproj", "{33D1EE6D-2361-4C39-ACE9-11466E23C044}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMS.Plugins.EFCoreSqlServer", "IMS.Plugins.EFCoreSqlServer\IMS.Plugins.EFCoreSqlServer.csproj", "{F9CC40B8-FAEB-47D7-9A8E-A54DD4A6D1E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMS.Plugins.EFCoreSqlServer", "IMS.Plugins.EFCoreSqlServer\IMS.Plugins.EFCoreSqlServer.csproj", "{F9CC40B8-FAEB-47D7-9A8E-A54DD4A6D1E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

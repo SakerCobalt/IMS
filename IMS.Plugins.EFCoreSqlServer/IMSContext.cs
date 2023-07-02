@@ -6,11 +6,15 @@ namespace IMS.Plugins.EFCoreSqlServer
 {
     public class IMSContext : DbContext
     {
-        public DbSet<Inventory>? Inventories { get; set; }
-        public DbSet<Product>? Products { get; set; }
-        public DbSet<ProductInventory>? ProductInventories { get; set; }
-        public DbSet<InventoryTransaction>? Transactions { get; set; }
-        public DbSet<ProductTransaction>? ProductTransactions { get; set; }
+        public IMSContext(DbContextOptions options) : base(options)
+        {
+             
+        }
+        public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductInventory> ProductInventories { get; set; }
+        public DbSet<InventoryTransaction> Transactions { get; set; }
+        public DbSet<ProductTransaction> ProductTransactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
