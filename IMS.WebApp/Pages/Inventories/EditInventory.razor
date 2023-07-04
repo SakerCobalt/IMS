@@ -4,6 +4,9 @@
 @inject NavigationManager NavigationManager
 @inject IEditInventoryUseCase EditInventoryUseCase
 
+@attribute [Authorize(Policy = "Inventory")]
+
+
 <h3>Edit Inventory</h3>
 <br />
 

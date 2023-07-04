@@ -2,6 +2,8 @@
 @inject NavigationManager NM
 @inject IAddProductUseCase AddProductUseCase
 
+@attribute [Authorize(Policy = "Inventory")]
+
 <h3>Add Product</h3>
 <br />
 <EditForm Model="product" OnValidSubmit="SaveProduct">

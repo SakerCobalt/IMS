@@ -4,6 +4,8 @@
 @inject IEditProductUseCase EditProductUseCase
 @inject NavigationManager NM
 
+@attribute [Authorize(Policy = "Inventory")]
+
 <h3>Edit Product</h3>
 @if(this.product != null)
 {

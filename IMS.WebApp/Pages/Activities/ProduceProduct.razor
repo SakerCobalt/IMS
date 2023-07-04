@@ -5,6 +5,8 @@
 @inject IProduceProductUseCase ProduceProductUseCase
 @inject IJSRuntime JSRuntime
 
+@attribute [Authorize(Policy = "Productions")]
+
 <h3>Produce Product</h3>
 <br />
 <EditForm id="produceForm" Model="produceViewModel" OnValidSubmit="Produce">

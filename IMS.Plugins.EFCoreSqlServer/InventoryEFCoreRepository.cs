@@ -7,17 +7,18 @@ namespace IMS.Plugins.EFCoreSqlServer
 {
     public class InventoryEFCoreRepository : IInventoryRepository
     {
-        private List<Inventory> _inventories;
-        private readonly IMSContext db;
+        private readonly IDbContextFactory<IMSContext> contextFactory;
 
-        public InventoryEFCoreRepository(IMSContext db)
+        public InventoryEFCoreRepository(IDbContextFactory<IMSContext> contextFactory)
         {
-            this.db = db;
+            this.contextFactory = contextFactory;
         }
 
         public async Task AddInventoryAsync(Inventory inventory)
         {
-            await this.db.Inventories.AddAsync(inventory);
+            using var db = this.contextFactory.CreateDbContext();
+
+            await db.Inventories.AddAsync(inventory);
 
             await db.SaveChangesAsync();
 
@@ -32,13 +33,17 @@ namespace IMS.Plugins.EFCoreSqlServer
 
         public async Task<bool> ExistsAsync(Inventory inventory)
         {
+            using var db = this.contextFactory.CreateDbContext();
+
             return await db.Inventories.AsNoTracking().AnyAsync(i=>i.InventoryName.Equals(inventory.InventoryName,StringComparison.OrdinalIgnoreCase));
             //return await Task.FromResult(_inventories.Any(i=>i.InventoryName.Equals(inventory.InventoryName,StringComparison.OrdinalIgnoreCase)));
         }
 
         public async Task<IEnumerable<Inventory>> GetInventoriesByNameAsync(string name)
         {
-            return await this.db.Inventories.Where(x => x.InventoryName.ToLower().IndexOf(name.ToLower()) >= 0).ToListAsync();
+            using var db = this.contextFactory.CreateDbContext();
+
+            return await db.Inventories.Where(x => x.InventoryName.ToLower().IndexOf(name.ToLower()) >= 0).ToListAsync();
 
             //if (string.IsNullOrWhiteSpace(name)) return await Task.FromResult(_inventories);
 
@@ -48,16 +53,18 @@ namespace IMS.Plugins.EFCoreSqlServer
         public async Task UpdateInventoryAsync(Inventory inventory)
         {
             //2 inventories can not have the same name
-            var inv = await this.db.Inventories.FindAsync(inventory.InventoryID);
+            using var db = this.contextFactory.CreateDbContext();
+
+            var inv = await db.Inventories.FindAsync(inventory.InventoryID);
             if (inv != null)
             {
                 inv.InventoryName = inventory.InventoryName;
                 inv.Price = inventory.Price;
-                inventory.Quantity = inventory.Quantity;
+                inv.Quantity = inventory.Quantity;
 
 
-                this.db.Inventories.Update(inv);
-                await this.db.SaveChangesAsync();
+                db.Inventories.Update(inv);
+                await db.SaveChangesAsync();
             }
 
             //if(_inventories.Any(i=>i.InventoryID != inventory.InventoryID && i.InventoryName.Equals(inventory.InventoryName, StringComparison.OrdinalIgnoreCase))) return Task.CompletedTask;
@@ -75,7 +82,9 @@ namespace IMS.Plugins.EFCoreSqlServer
 
         public async Task<Inventory> GetInventoryByIdAsync(int inventoryId)
         {
-            var inv = await this.db.Inventories.FindAsync(inventoryId);
+            using var db = this.contextFactory.CreateDbContext();
+
+            var inv = await db.Inventories.FindAsync(inventoryId);
             if (inv == null) return new Inventory();
             
             return inv;

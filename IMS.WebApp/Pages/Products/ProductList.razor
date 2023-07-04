@@ -1,6 +1,8 @@
 ﻿@page "/products"
 @inject NavigationManager NavigationManager
 
+@attribute [Authorize(Policy = "Inventory")]
+
 <h3>Product List</h3>
 <br />
 <SearchProductComponent OnSearchProduct="OnSearchProduct"></SearchProductComponent>

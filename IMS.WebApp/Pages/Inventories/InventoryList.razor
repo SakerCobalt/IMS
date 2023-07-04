@@ -4,6 +4,8 @@
 @inject NavigationManager NavigationManager
 @inject IViewInventoriesByNameUseCase ViewInventoriesByNameUseCase
 
+@attribute [Authorize(Policy = "Inventory")]
+
 <h3>Inventory List</h3>
 <br />
 <SearchInventoryComponent OnSearchInventory="OnInventorySearch"></SearchInventoryComponent>

@@ -15,9 +15,20 @@ using IMS.UseCases.Reports.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using IMS.Plugins.EFCoreSqlServer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 
 var builder = WebApplication.CreateBuilder(args);
 var constr = builder.Configuration.GetConnectionString("InventoryManagement");
+
+//configuration authroizations
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy => policy.RequireClaim("Department", "Administration"));
+    options.AddPolicy("Inventory", policy => policy.RequireClaim("Department", "InventoryManagement"));
+    options.AddPolicy("Sales", policy => policy.RequireClaim("Department", "Sales"));
+    options.AddPolicy("Purchasers", policy => policy.RequireClaim("Department", "Purchasing"));
+    options.AddPolicy("Productions", policy => policy.RequireClaim("Department", "ProductionManagement"));
+});
 
 //Configure EF Core for Identity
 builder.Services.AddDbContext<AccountDbContext>(options =>
@@ -31,7 +42,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     options.SignIn.RequireConfirmedEmail = false;
 }).AddEntityFrameworkStores<AccountDbContext>();
 
-builder.Services.AddDbContext<IMSContext>(options =>
+builder.Services.AddDbContextFactory<IMSContext>(options =>
 {
     options.UseSqlServer(constr);
 });
@@ -41,10 +52,22 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 
-builder.Services.AddSingleton<IInventoryRepository, InventoryRepository>();
-builder.Services.AddSingleton<IProductRepository, ProductRepository>();
-builder.Services.AddSingleton<IInventoryTransactionRepository, InventoryTransactionRepository>();
-builder.Services.AddSingleton<IProductTransactionRepository, ProductTransactionRepository>();
+if (builder.Environment.IsEnvironment("TESTING"))
+{
+    StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
+
+    builder.Services.AddSingleton<IInventoryRepository, InventoryRepository>();
+    builder.Services.AddSingleton<IProductRepository, ProductRepository>();
+    builder.Services.AddSingleton<IInventoryTransactionRepository, InventoryTransactionRepository>();
+    builder.Services.AddSingleton<IProductTransactionRepository, ProductTransactionRepository>();
+}
+else
+{
+    builder.Services.AddTransient<IInventoryRepository, InventoryEFCoreRepository>();
+    builder.Services.AddTransient<IProductRepository, ProductEFCoreRepository>();
+    builder.Services.AddTransient<IInventoryTransactionRepository, InventoryTransactionEFCoreRepository>();
+    builder.Services.AddTransient<IProductTransactionRepository, ProductTransactionEFCoreRepository>();
+}
 
 builder.Services.AddTransient<IViewInventoriesByNameUseCase, ViewInventoriesByNameUseCase>();
 builder.Services.AddTransient<IAddInventoryUseCase, AddInventoryUseCase>();
